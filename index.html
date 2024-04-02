@@ -162,8 +162,8 @@
         }
     </style>
     <script src="./js/jquery-1.12.4.min.js"></script>
-  <script type="module" crossorigin src="./assets/index.fcb2e383.js"></script>
-  <link rel="stylesheet" href="./assets/index.b7725739.css">
+  <script type="module" crossorigin src="./assets/index.323e4daf.js"></script>
+  <link rel="stylesheet" href="./assets/index.e21c5fb2.css">
 </head>
 <body>
 <div class="wrap">
@@ -177,13 +177,13 @@
         </div>
     </div>
    
-    <div class="introAni">
+    <!-- <div class="introAni">
        
             <div><img src="./assets/image/intro_logo.gif" alt="
                 "></div>
             <div class="introText">0%</div>
        
-      </div>
+      </div> -->
      
     <div id="app"></div>
     
@@ -242,6 +242,21 @@
                 .text(count + "%");
         }, 25);
     }, 1);
+    document.addEventListener("DOMContentLoaded", function() {
+    
+    var introShown = localStorage.getItem("introShown");
+
+ 
+    if (!introShown) {
+        $(".introAni").show(); 
+    }
+
+    
+    $(".introAni").on("click", function() {
+        localStorage.setItem("introShown", true);
+        $(this).fadeOut(); 
+    });
+});
 
 </script>
   <!-- AOS 스크립트 시작 -->
