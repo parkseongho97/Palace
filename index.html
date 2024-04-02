@@ -15,20 +15,12 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&display=swap" rel="stylesheet">
     <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&display=swap" rel="stylesheet">
 
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script> 
-    <script
-      src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.12.4/jquery.min.js"
-      integrity="sha512-jGsMH83oKe9asCpkOVkBnUrDDTp8wl+adkB2D+//JtlxO4SrLoJdhbOysIFQJloQFD+C4Fl1rMsQZF76JjV0eQ=="
-      crossorigin="anonymous"
-      referrerpolicy="no-referrer"
-    ></script>
-    <script
-    type="text/javascript"
-    src="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"
-  ></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.12.4/jquery.min.js" integrity="sha512-jGsMH83oKe9asCpkOVkBnUrDDTp8wl+adkB2D+//JtlxO4SrLoJdhbOysIFQJloQFD+C4Fl1rMsQZF76JjV0eQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
   
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Vite + Vue</title>
@@ -161,9 +153,9 @@
         }
         }
     </style>
-    <script src="./js/jquery-1.12.4.min.js"></script>
-  <script type="module" crossorigin src="./assets/index.323e4daf.js"></script>
-  <link rel="stylesheet" href="./assets/index.e21c5fb2.css">
+    <!-- <script src="./js/jquery-1.12.4.min.js"></script> -->
+  <script type="module" crossorigin src="./assets/index.bb948286.js"></script>
+  <link rel="stylesheet" href="./assets/index.c99cc04c.css">
 </head>
 <body>
 <div class="wrap">
@@ -191,8 +183,6 @@
 
 <script>
 
-    
-    
     // 팝업창 열고닫기
     $(".popup .close button").on("click", function () {
         if ($(this).prev().prop("checked")) {
@@ -206,13 +196,8 @@
         $(".popup").removeClass("on");
     });
 
-    $(window).on("load", function () {
-        $("html").animate(
-            {
-                scrollTop: 0,
-            },
-            100
-        );
+    $(document).ready(function () {
+        $("html").animate({scrollTop: 0}, 100);
 
         let objString = localStorage.getItem("objkey");
         if (objString) {
@@ -222,42 +207,29 @@
                 localStorage.removeItem("objkey");
             } else {
                 $(".popup").removeClass("on");
+                $(".introAni").hide(); // 저장된 정보가 있을 때는 인트로 효과를 숨깁니다.
             }
         } else {
             $(".popup").addClass("on");
         }
+
+        // 페이지가 로드될 때만 인트로 효과를 보여줍니다.
+        if (!performance.navigation.type || performance.navigation.type === 1) {
+            setTimeout(function () {
+                let count = 0;
+                let timer = setInterval(function () {
+                    count++;
+                    if (count >= 100) {
+                        clearInterval(timer);
+                        $(".introAni").fadeOut(500, function () {
+                            $(this).remove();
+                        });
+                    }
+                    $(".introAni div").eq(1).text(count + "%");
+                }, 25);
+            }, 1);
+        }
     });
-    setTimeout(function () {
-        let count = 0;
-        let timer = setInterval(function () {
-            count++;
-            if (count >= 100) {
-                clearInterval(timer);
-                $(".introAni").fadeOut(500, function () {
-                    $(this).remove();
-                });
-            }
-            $(".introAni div")
-                .eq(1)
-                .text(count + "%");
-        }, 25);
-    }, 1);
-    document.addEventListener("DOMContentLoaded", function() {
-    
-    var introShown = localStorage.getItem("introShown");
-
- 
-    if (!introShown) {
-        $(".introAni").show(); 
-    }
-
-    
-    $(".introAni").on("click", function() {
-        localStorage.setItem("introShown", true);
-        $(this).fadeOut(); 
-    });
-});
-
 </script>
   <!-- AOS 스크립트 시작 -->
   <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
