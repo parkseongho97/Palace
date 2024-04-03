@@ -85,6 +85,7 @@
         /* background:linear-gradient(to right, #D44177 0%, #0C68BE 100%) !important; */
         background: #fff;
         color: #143b63;
+        opacity: 0;
         
         text-align: center;
         /* opacity: 0.4; */
@@ -183,6 +184,33 @@
 
 <script>
 
+$(document).ready(function () {
+    // sessionStorage에 intro 표시 여부를 저장하고, 페이지가 처음 로드될 때만 인트로를 보여줍니다.
+    if (!sessionStorage.getItem("introShown")) {
+        // 인트로를 보여줍니다.
+        $(".introAni").show().css({opacity:1});
+        // sessionStorage에 intro 표시 여부를 저장합니다.
+        sessionStorage.setItem("introShown", true);
+
+        // 인트로 애니메이션 효과 및 숨기기
+        setTimeout(function () {
+            let count = 0;
+            let timer = setInterval(function () {
+                count++;
+                if (count >= 100) {
+                    clearInterval(timer);
+                    $(".introAni").fadeOut(500, function () {
+                        $(this).remove();
+                    });
+                }
+                $(".introAni div").eq(1).text(count + "%");
+            }, 25);
+        }, 1);
+    } else if(sessionStorage.getItem("introShown")) {
+        // sessionStorage에 introShown이 이미 있으면 인트로를 숨깁니다.
+        $(".introAni").hide();
+    }
+
     // 팝업창 열고닫기
     $(".popup .close button").on("click", function () {
         if ($(this).prev().prop("checked")) {
@@ -196,40 +224,38 @@
         $(".popup").removeClass("on");
     });
 
-    $(document).ready(function () {
-        $("html").animate({scrollTop: 0}, 100);
-
-        let objString = localStorage.getItem("objkey");
-        if (objString) {
-            const obj = JSON.parse(objString);
-            if (Date.now() > obj.expire) {
-                $(".popup").addClass("on");
-                localStorage.removeItem("objkey");
-            } else {
-                $(".popup").removeClass("on");
-                $(".introAni").hide(); // 저장된 정보가 있을 때는 인트로 효과를 숨깁니다.
-            }
-        } else {
+    // 팝업창 노출 여부 확인 및 처리
+    let objString = localStorage.getItem("objkey");
+    if (objString) {
+        const obj = JSON.parse(objString);
+        if (Date.now() > obj.expire) {
             $(".popup").addClass("on");
+            localStorage.removeItem("objkey");
+        } else {
+            $(".popup").removeClass("on");
         }
+    } else {
+        $(".popup").addClass("on");
+    }
+});
 
-        // 페이지가 로드될 때만 인트로 효과를 보여줍니다.
-        if (!performance.navigation.type || performance.navigation.type === 1) {
-            setTimeout(function () {
-                let count = 0;
-                let timer = setInterval(function () {
-                    count++;
-                    if (count >= 100) {
-                        clearInterval(timer);
-                        $(".introAni").fadeOut(500, function () {
-                            $(this).remove();
-                        });
-                    }
-                    $(".introAni div").eq(1).text(count + "%");
-                }, 25);
-            }, 1);
-        }
-    });
+// 인트로 애니메이션을 페이지가 완전히 로드된 후에 시작하도록 이벤트를 바인딩합니다.
+$(window).on("load", function() {
+    if (!sessionStorage.getItem("introShown")) {
+        // 인트로 애니메이션 효과 및 숨기기
+        let count = 0;
+        let timer = setInterval(function () {
+            count++;
+            if (count >= 100) {
+                clearInterval(timer);
+                $(".introAni").fadeOut(500, function () {
+                    $(this).remove();
+                });
+            }
+            $(".introAni div").eq(1).text(count + "%");
+        }, 25);
+    }
+});
 </script>
   <!-- AOS 스크립트 시작 -->
   <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
